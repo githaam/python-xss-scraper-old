@@ -3,6 +3,7 @@
 """
 
 import sys
+import testing
 from PyQt5.QtWidgets import * #QMainWindow, QApplication, QWidget, QAction, QTableWidget,QTableWidgetItem,QVBoxLayout
 from PyQt5.QtGui import * #QIcon
 from PyQt5.QtCore import * #pyqtSlot
@@ -53,7 +54,7 @@ class App(QWidget):
         self.fBox = QFormLayout()
         self.fBox.addRow(self.lab1, self.verBox)
 
-        self.b1.clicked.connect(self.diklik)
+        self.b1.clicked.connect(self.scan)
 
     #2
     def tablePayload(self):
@@ -65,7 +66,7 @@ class App(QWidget):
         self.listPayload.move(0,0)
 
         # table selection change
-        self.listPayload.doubleClicked.connect(self.on_click)
+        #self.listPayload.doubleClicked.connect(self.on_click)
 
     #3
     def listChecked(self):
@@ -89,13 +90,15 @@ class App(QWidget):
     #    for currentQTableWidgetItem in self.listPayload.selectedItems():
     #        print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
 
-    def diklik(self):
-        kata = self.in1.text()
-        jawaban = ""
-        self.listPayload.setRowCount(len(kata))
+    def scan(self):
+        target = self.in1.text()
+        hasil = testing.tolong(target)
 
-        for i in range(len(kata)):
-            self.listPayload.setItem(i,0, QTableWidgetItem(kata[i]))
+        self.listPayload.setRowCount(len(target))
+
+        self.out1.setText(hasil)
+        for i in range(len(target)):
+            self.listPayload.setItem(i,0, QTableWidgetItem(target[i]))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
