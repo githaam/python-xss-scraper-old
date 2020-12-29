@@ -2,7 +2,6 @@ import requests
 import random
 from bs4 import BeautifulSoup
 
-
 """
 
 	TO DO
@@ -75,6 +74,7 @@ def computeLPSArray(pat, M, lps):
 """
     konfigurasi
 """
+
 def scraping(target):
 	hasilAkhir = "Tidak Ditemukan"
 	#target = """https://www.unud.ac.id"""
@@ -98,22 +98,11 @@ def scraping(target):
 		i+=1
 
 	with open('payload.txt','r') as file:
-		payload = file.read()
-
-	pat = []
-	temp = ""
-
-	for i in range(len(payload)):
-		if payload[i] != "\n":
-			temp += payload[i]
-		else:
-			pat.append(temp)
-			temp = ""
-		i += 1
+		pat = file.readlines()
 
 	for i in range(len(pat)):
+		pat[i] = pat[i].replace("\n","")
 		hasilAkhir = KMPSearch(pat[i], str(soup))
-		#print (hasilAkhir)
 		if hasilAkhir == "":
 			hasilAkhir = ("Not Found")
 			pattern = "-"
@@ -121,7 +110,7 @@ def scraping(target):
 			#print (hasilAkhir+" \""+pat[i]+"\"")
 			pattern = pat[i]
 			break
-
+	
 	nomor = random.randint(1,len(url))
 
 	"""

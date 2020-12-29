@@ -1,12 +1,10 @@
 """
     GUI PYQT 5: CATATAN
 
-    ubah checked website.
-    kalo bisa tulis ketiganya
-    ayo selesaiin malam ini
+    GANTI JADI PySimpleGUI?
+
 
 """
-
 
 import sys
 import program
@@ -88,14 +86,14 @@ class App(QWidget):
 
     #4
     def result(self):
-        self.payload = QLineEdit(" ")
+        self.payload = QLineEdit("Pattern yang ditemukan")
         self.payload.setAlignment(Qt.AlignCenter)
         self.payload.setReadOnly(1)
         self.out1 = QLineEdit("Hasil")
         self.out1.setAlignment(Qt.AlignCenter)
         self.out1.setReadOnly(1)
 
-    """"
+    """
     def bar(self):
         self.progress = QProgressBar(self)
         self.progress.setGeometry(0,0,300,25)
