@@ -78,47 +78,57 @@ def computeLPSArray(pat, M, lps):
 def scraping(target):
 	hasilAkhir = "Tidak Ditemukan"
 	#target = """https://www.unud.ac.id"""
-	result = requests.get(target)
-	soup = BeautifulSoup(result.text, 'html.parser')
+	target = target.replace(" ","")
 
-	"""
-		mencari semua link yang ada pada page website
-		dan memasukkannya ke dalam file
-	"""
+	try:
+		result = requests.get(target)
+	except IndexError:
+		hasilAkhir = "Index Error."
+		pattern = "-"
+	except:
+		hasilAkhir = "URL Error."
+		pattern = "-"
+	else:
+		soup = BeautifulSoup(result.text, 'html.parser')
 
-	i = 1
-	url = []
+		"""
+			mencari semua link yang ada pada page website
+			dan memasukkannya ke dalam file
+		"""
 
-	for links in soup.find_all('a', href=True):
-		link = str(links['href'].replace(" ","").replace("\n",""))
-		if link[0:4] == "http":
-			url.append(link)
-		else:
-			continue
-		i+=1
+		i = 1
+		url = []
 
-	with open('payload.txt','r') as file:
-		pat = file.readlines()
+		for links in soup.find_all('a', href=True):
+			link = str(links['href'].replace(" ","").replace("\n",""))
+			if link[0:4] == "http":
+				url.append(link)
+			else:
+				continue
+			i+=1
 
-	for i in range(len(pat)):
-		pat[i] = pat[i].replace("\n","")
-		hasilAkhir = KMPSearch(pat[i], str(soup))
-		if hasilAkhir == "":
-			hasilAkhir = ("Not Found")
-			pattern = "-"
-		else:
-			#print (hasilAkhir+" \""+pat[i]+"\"")
-			pattern = pat[i]
-			break
-	
-	nomor = random.randint(1,len(url))
+		with open('payload.txt','r') as file:
+			pat = file.readlines()
 
-	"""
-	### UN-COMMENT PADA SAAT PENGUJIAN ###
-	print (nomor)
-	"""
+		for i in range(len(pat)):
+			pat[i] = pat[i].replace("\n","")
+			hasilAkhir = KMPSearch(pat[i], str(soup))
+			if hasilAkhir == "":
+				hasilAkhir = ("Not Found")
+				pattern = "-"
+			else:
+				#print (hasilAkhir+" \""+pat[i]+"\"")
+				pattern = pat[i]
+				break
+		
+		nomor = random.randint(1,len(url))
 
-	target = url[nomor]
+		"""
+		### UN-COMMENT PADA SAAT PENGUJIAN ###
+		print (nomor)
+		"""
+
+		target = url[nomor]
 
 	return hasilAkhir, pattern, target
 
