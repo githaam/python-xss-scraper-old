@@ -98,6 +98,7 @@ def scraping(target):
 
 		i = 1
 		url = []
+		pat = []
 
 		for links in soup.find_all('a', href=True):
 			link = str(links['href'].replace(" ","").replace("\n",""))
@@ -107,8 +108,13 @@ def scraping(target):
 				continue
 			i+=1
 
-		with open('payload.txt','r') as file:
-			pat = file.readlines()
+		try:
+			with open('payload.txt','r') as file:
+				pat = file.readlines()
+		except:
+			hasilAkhir = "Couldn't find payload.txt"
+			pattern = "-"
+
 
 		for i in range(len(pat)):
 			pat[i] = pat[i].replace("\n","")

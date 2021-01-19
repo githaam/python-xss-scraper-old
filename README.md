@@ -14,3 +14,6 @@
 ### Tambahan
 1. Belum ada loading bar
 2. payload.txt harus ditambahkan
+3. try except pada saat membuka dan membaca file
+
+Error handler di saat masukkin variable
