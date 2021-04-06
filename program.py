@@ -1,12 +1,13 @@
 import requests
 import random
+#from threading import Thread """belom diimplementasikan"""
 from bs4 import BeautifulSoup
 
 """
 
 	TO DO
 
-	1. perbaikin penamaan function agar lebih mudah
+	1. coba buat multithread supaya programnya tidak notresponding lagi
 
 """
 
@@ -71,13 +72,7 @@ def computeLPSArray(pat, M, lps):
 				lps[i] = 0
 				i += 1
 
-"""
-    konfigurasi
-"""
-
 def scraping(target):
-	hasilAkhir = "Tidak Ditemukan"
-	#target = """https://www.unud.ac.id"""
 	target = target.replace(" ","")
 
 	try:
@@ -85,20 +80,14 @@ def scraping(target):
 	except IndexError:
 		hasilAkhir = "Index Error."
 		pattern = "-"
+		return hasilAkhir, pattern
 	except:
 		hasilAkhir = "URL Error."
 		pattern = "-"
+		return hasilAkhir, pattern
 	else:
 		soup = BeautifulSoup(result.text, 'html.parser')
-
-		"""
-			mencari semua link yang ada pada page website
-			dan memasukkannya ke dalam file
-		"""
-
-		i = 1
 		url = []
-		pat = []
 
 		for links in soup.find_all('a', href=True):
 			link = str(links['href'].replace(" ","").replace("\n",""))
@@ -106,83 +95,95 @@ def scraping(target):
 				url.append(link)
 			else:
 				continue
-			i+=1
+		return url, soup
 
-		try:
-			with open('payload.txt','r') as file:
-				pat = file.readlines()
-		except:
-			hasilAkhir = "Couldn't find payload.txt"
+def openFile():
+	try:
+		with open('payload.txt','r', encoding='utf8') as file:
+			pat = file.readlines()
+	except:
+		hasilAkhir = "Couldn't find payload.txt"
+		pattern = "-"
+		return hasilAkhir, pattern
+	else:
+		pat = [i.replace("\n","") for i in pat]
+		pat = list(filter(None, pat))
+		return pat
+
+def scanning(pat, soup): #pat, soup
+	for i in range(len(pat)):
+		hasilAkhir = KMPSearch(pat[i], str(soup))
+		if hasilAkhir == "":
+			hasilAkhir = ("Not Found")
 			pattern = "-"
-
-
-		for i in range(len(pat)):
-			pat[i] = pat[i].replace("\n","")
-			hasilAkhir = KMPSearch(pat[i], str(soup))
-			if hasilAkhir == "":
-				hasilAkhir = ("Not Found")
-				pattern = "-"
-			else:
-				#print (hasilAkhir+" \""+pat[i]+"\"")
-				pattern = pat[i]
-				break
-		
-		nomor = random.randint(1,len(url))
-
-		"""
-		### UN-COMMENT PADA SAAT PENGUJIAN ###
-		print (nomor)
-		"""
-
-		target = url[nomor]
-
-	return hasilAkhir, pattern, target
+			#return hasilAkhir, pattern
+		else:
+			#print (hasilAkhir+" \""+pat[i]+"\"")
+			pattern = pat[i]
+			break
+			#return hasilAkhir, pattern
+	
+	return hasilAkhir, pattern
 
 def main(target): #nanti ditambah aja variabel
 	#target = "https://www.unud.ac.id/"
 
+	if (len(openFile()) == 2):
+		hasilAkhir, pattern = openFile()
+		return hasilAkhir, pattern
+	else:
+		pat = openFile()
+		
 	global Rep
-	"""
-	### un-comment pada saat pengujian ###
-
-	print ("first rep is "+str(Rep))
-	"""
+	
 	scanned = []
 	targets = []
-
 	scanned.append(target)
 
-	for Rep in range(3):
+	for Rep in range(2):
+		#scanned.append(target)
+		url, soup = scraping(target)
+		if (soup == '-'):
+			hasilAkhir, pattern = url, soup
+			return hasilAkhir, pattern
 
-		"""
-		### UN-COMMENT PADA SAAT PENGUJIAN ###
-		print ("rep pada awal loop: "+str(Rep))
-		"""
+		hasilAkhir, pattern = scanning(pat, soup)
 
-		hasilAkhir, pattern, targets = scraping(target)
+		try:
+			nomor = random.randint(1,len(url))
+			target = url[nomor]
+			scanned.append(target)
+		except:
+			# try:
+			# 	nomor = random.randint(1,len(url))
+			# 	target = url[nomor]
+			# except:
+			hasilAkhir = "Link not found."
+			pattern = "-"
+			
+		#hasilAkhir, pattern, targets = scraping(target)
 
-		"""
-		### UN-COMMENT PADA SAAT PENGUJIAN ###
-		print (targets)
-		"""
 		if hasilAkhir != "Not Found":
 			break
-		else:
-			scanned.append(targets)
+		# else:
+		# 	scanned.append(target)
 
-	"""
-	### UN-COMMENT PADA SAAT PENGUJIAN ###
-	print (scanned)
-	"""
 	return hasilAkhir, pattern, scanned
 
 """
 ### UN-COMMENT PADA SAAT PENGUJIAN ###
+"""
 
-if __name__ == '__main__':
-	hasilAkhir, pattern, target = main()
-	scanned = []
-	scanned = target[:]
-	print(type(target))
-	print (scanned[1])
-	"""
+# if __name__ == '__main__':
+# 	# hasilAkhir, pattern, target = main()
+# 	# scanned = []
+# 	# scanned = target[:]
+# 	# print(type(target))
+# 	# print (scanned[1])
+	
+# 	#openFile()
+# 	#scraping('https://www.kaskus.co.id/')
+
+# 	#hasilAkhir, pattern = scanning(soup, pat)
+
+# 	print (main('https://www.kaskus.co.id/'))
