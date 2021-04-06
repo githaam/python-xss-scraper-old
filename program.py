@@ -159,7 +159,7 @@ def main(target): #nanti ditambah aja variabel
 			# 	target = url[nomor]
 			# except:
 			hasilAkhir = "Link not found."
-			pattern = "-"
+			pattern = "Tidak ada link lain yang ditemukan."
 			
 		#hasilAkhir, pattern, targets = scraping(target)
 
