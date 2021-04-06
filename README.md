@@ -1,19 +1,10 @@
 
-### TDL
+### Python Stored XSS Checker
 ======
-1. Program masih menampilkan IndexError apabila menginputkan "https://www.unud.ac.id/StringAsal"
-
- Jalankan program melalui GUI.py
-
-======
-- Menggunakan Python 3
-- Install PyQt5
-- Install Beautiful Soup 4
+1. Install Python3
+2. Install all dependecies with pip3 `pip install requirements.txt`
+3. Run the GUI.py
 
 ======
 ### Tambahan
 1. Belum ada loading bar
-2. payload.txt harus ditambahkan
-3. try except pada saat membuka dan membaca file
-
-Error handler di saat masukkin variable
